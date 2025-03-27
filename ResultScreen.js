@@ -1,18 +1,19 @@
 import React from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { StyleSheet, View, Text, Button } from "react-native";
 
 export default function ResultScreen({ route, navigation }) {
-  // 从上一个页面获取字符串
-  const { finalString } = route.params || { finalString: "" };
+  const { result = "Result" } = route.params || {};
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Result Screen</Text>
-      <Text style={styles.result}>
-        The manipulated string is: {finalString}
-      </Text>
-
-      <Button title="Go Back" onPress={() => navigation.goBack()} />
+      <Text style={styles.label}> Result!! </Text>
+      <Text style={styles.resultText}> {result} </Text>
+      <Button
+        title="Go Back"
+        onPress={() => {
+          navigation.goBack();
+        }}
+      />
     </View>
   );
 }
@@ -21,15 +22,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
-    padding: 16,
+    backgroundColor: "#ecf0f1",
+    padding: 8,
   },
-  title: {
-    fontSize: 20,
-    marginBottom: 20,
+  label: {
+    fontSize: 16,
+    marginBottom: 8,
   },
-  result: {
+
+  resultText: {
+    marginTop: 12,
+    marginBottom: 12,
     fontSize: 18,
-    marginBottom: 20,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });

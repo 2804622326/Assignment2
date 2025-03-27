@@ -1,68 +1,78 @@
-import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import React from "react";
+import { StyleSheet, View, Text, TextInput, Button } from "react-native";
 
+export default function Homescreen({ navigation }) {
+  const [number1, setNumber1] = React.useState("");
+  const [number2, setNumber2] = React.useState("");
+  const [result, setResult] = React.useState(null);
 
-export default function HomeScreen({ navigation }) {
-  const [inputText, setInputText] = React.useState('');
-  const [manipulatedText, setManipulatedText] = React.useState(null);
-
-  const handleChangeText = (text) => {
-    console.log('User input changed:', text);
-    setInputText(text);
-  };
-
-  const handleStringManipulation = () => {
-
-    const reversed = inputText.split('').reverse().join('');
-    setManipulatedText(reversed);
-  };
-
-
-  const goToResultScreen = () => {
-    handleStringManipulation();
-    navigation.navigate('Result', { finalString: manipulatedText });
+  const getResult = (num1, num2) => {
+    const parsed1 = parseFloat(num1);
+    const parsed2 = parseFloat(num2);
+    if (isNaN(parsed1) || isNaN(parsed2)) {
+      return "Invalid input";
+    }
+    return parsed1 + parsed2;
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Enter a Word or Phrase</Text>
-
+      <Text style={styles.label}>Enter First Number</Text>
       <TextInput
         style={styles.input}
-        placeholder="Type something..."
-        keyboardType="default"
-        value={inputText}
-        onChangeText={handleChangeText}
+        value={number1}
+        onChangeText={setNumber1}
+        placeholder="0"
+        keyboardType="numeric"
       />
-
-      <Button title="Manipulate String" onPress={handleStringManipulation} />
-
-      {manipulatedText !== null && (
-        <Text style={styles.result}>Result: {manipulatedText}</Text>
+      <Text style={styles.label}>Enter Second Number</Text>
+      <TextInput
+        style={styles.input}
+        value={number2}
+        onChangeText={setNumber2}
+        placeholder="0"
+        keyboardType="numeric"
+      />
+      <Button
+        title="Calculate Sum"
+        onPress={() => setResult(getResult(number1, number2))}
+      />
+      {result !== null && (
+        <Text style={styles.resultText}>Result: {result}</Text>
       )}
-
-      <View style={{ marginTop: 10 }}>
-        <Button title="Go to Result Screen" onPress={goToResultScreen} />
-      </View>
+      <Button
+        title="Result Screen"
+        onPress={() => {
+          navigation.navigate("ResultScreen", { result: result });
+        }}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, justifyContent: 'center' },
-  title: { fontSize: 18, marginBottom: 10, textAlign: 'center' },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginVertical: 8,
-    borderRadius: 4,
-    fontSize: 16,
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: "#ecf0f1",
+    padding: 8,
   },
-  result: {
-    marginTop: 20,
+  label: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  input: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 8,
+  },
+  resultText: {
+    marginTop: 12,
+    marginBottom: 12,
     fontSize: 18,
-    textAlign: 'center',
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
